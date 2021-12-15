@@ -1,1 +1,1 @@
-./waf -vv test
+./waf -v test

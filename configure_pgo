@@ -1,2 +1,4 @@
 --static-progs
 --static
+--no-coverage
+--test

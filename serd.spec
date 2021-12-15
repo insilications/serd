@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : serd
 Version  : 0.30.10
-Release  : 308
+Release  : 318
 URL      : file:///aot/build/clearlinux/packages/serd/serd-v0.30.10.tar.gz
 Source0  : file:///aot/build/clearlinux/packages/serd/serd-v0.30.10.tar.gz
 Summary  : Lightweight RDF syntax library
@@ -16,6 +16,7 @@ BuildRequires : buildreq-configure
 BuildRequires : buildreq-distutils3
 BuildRequires : bzip2-dev
 BuildRequires : bzip2-staticdev
+BuildRequires : clr-rpm-config
 BuildRequires : gcc
 BuildRequires : gcc-dev
 BuildRequires : gcc-libs-math
@@ -68,7 +69,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1639574904
+export SOURCE_DATE_EPOCH=1639584040
 unset LD_AS_NEEDED
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
@@ -164,15 +165,16 @@ export LDFLAGS="${LDFLAGS_GENERATE}"
 export ASMFLAGS="${ASMFLAGS_GENERATE}"
 export LIBS="${LIBS_GENERATE}"
 sd -r 'allow_unknown=False' 'allow_unknown=True' waflib/ || :
-%waf --verbose --out=builddir  --static-progs \
+%waf --out=builddir  --static-progs \
 --static \
---test
-./waf --verbose --jobs=16 --out=builddir
+--no-coverage \
+--test || :
+./waf build --verbose --jobs=16 --out=builddir
 
 ## profile_payload start
 unset LD_LIBRARY_PATH
 unset LIBRARY_PATH
-./waf -vv test
+./waf -v test
 export LD_LIBRARY_PATH="/usr/nvidia/lib64:/usr/nvidia/lib64/vdpau:/usr/nvidia/lib64/xorg/modules/drivers:/usr/nvidia/lib64/xorg/modules/extensions:/usr/local/cuda/lib64:/usr/lib64/haswell:/usr/lib64/haswell/pulseaudio:/usr/lib64/haswell/alsa-lib:/usr/lib64/haswell/gstreamer-1.0:/usr/lib64/haswell/pipewire-0.3:/usr/lib64/haswell/spa-0.2:/usr/lib64/dri:/usr/lib64/chromium:/usr/lib64:/usr/lib64/pulseaudio:/usr/lib64/alsa-lib:/usr/lib64/gstreamer-1.0:/usr/lib64/pipewire-0.3:/usr/lib64/spa-0.2:/usr/lib:/aot/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/aot/intel/oneapi/compiler/latest/linux/lib:/aot/intel/oneapi/mkl/latest/lib/intel64:/aot/intel/oneapi/tbb/latest/lib/intel64/gcc4.8:/usr/share:/usr/lib64/wine:/usr/nvidia/lib32:/usr/nvidia/lib32/vdpau:/usr/lib32:/usr/lib32/wine"
 export LIBRARY_PATH="/usr/nvidia/lib64:/usr/nvidia/lib64/vdpau:/usr/nvidia/lib64/xorg/modules/drivers:/usr/nvidia/lib64/xorg/modules/extensions:/usr/local/cuda/lib64:/usr/lib64/haswell:/usr/lib64/haswell/pulseaudio:/usr/lib64/haswell/alsa-lib:/usr/lib64/haswell/gstreamer-1.0:/usr/lib64/haswell/pipewire-0.3:/usr/lib64/haswell/spa-0.2:/usr/lib64/dri:/usr/lib64/chromium:/usr/lib64:/usr/lib64/pulseaudio:/usr/lib64/alsa-lib:/usr/lib64/gstreamer-1.0:/usr/lib64/pipewire-0.3:/usr/lib64/spa-0.2:/usr/lib:/aot/intel/oneapi/compiler/latest/linux/compiler/lib/intel64_lin:/aot/intel/oneapi/compiler/latest/linux/lib:/aot/intel/oneapi/mkl/latest/lib/intel64:/aot/intel/oneapi/tbb/latest/lib/intel64/gcc4.8:/usr/share:/usr/lib64/wine:/usr/nvidia/lib32:/usr/nvidia/lib32/vdpau:/usr/lib32:/usr/lib32/wine"
 ## profile_payload end
@@ -189,9 +191,11 @@ export LDFLAGS="${LDFLAGS_USE}"
 export ASMFLAGS="${ASMFLAGS_USE}"
 export LIBS="${LIBS_USE}"
 sd -r 'allow_unknown=False' 'allow_unknown=True' waflib/ || :
-%waf --verbose --out=builddir --static-progs \
---static
-./waf --verbose --jobs=16 --out=builddir
+%waf --out=builddir --static-progs \
+--static \
+--no-coverage \
+--test  || :
+./waf build --verbose --jobs=16 --out=builddir
 fi
 
 %install
