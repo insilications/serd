@@ -1,14 +1,14 @@
-From 3a3fe7c82c379bb4e5d08efbc3452b933f270639 Mon Sep 17 00:00:00 2001
+From 9c0ce40a959652ecd3a1611e007049b1ed9031f4 Mon Sep 17 00:00:00 2001
 From: Francisco Boni <boboniboni@gmail.com>
 Date: Wed, 15 Dec 2021 19:37:11 -0300
 Subject: [PATCH] Fix PGO build
 
 ---
- wscript | 33 ++++++++++++++++-----------------
- 1 file changed, 16 insertions(+), 17 deletions(-)
+ wscript | 37 ++++++++++++++++++-------------------
+ 1 file changed, 18 insertions(+), 19 deletions(-)
 
 diff --git a/wscript b/wscript
-index 178ac06d..fadc413d 100644
+index 178ac06d..a3668850 100644
 --- a/wscript
 +++ b/wscript
 @@ -141,7 +141,7 @@ def configure(conf):
@@ -71,6 +71,24 @@ index 178ac06d..fadc413d 100644
  
      # Utilities
      if bld.env.BUILD_UTILS:
+@@ -384,7 +383,7 @@ def earl_assertion(test, passed, asserter):
+        datetime.datetime.now().replace(microsecond=0).isoformat())
+ 
+ 
+-serdi = './serdi_static'
++serdi = './serdi'
+ 
+ 
+ def test_thru(check, base, path, check_path, flags, isyntax, osyntax, opts=[]):
+@@ -444,7 +443,7 @@ def _load_rdf(filename):
+     model = {}
+     instances = {}
+ 
+-    cmd = _wrapped_command(['./serdi_static', filename])
++    cmd = _wrapped_command(['./serdi', filename])
+     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+     for line in proc.communicate()[0].splitlines():
+         matches = re.match(r'<([^ ]*)> <([^ ]*)> <([^ ]*)> \.',
 -- 
 2.34.1
 
