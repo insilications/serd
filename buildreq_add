@@ -5,9 +5,6 @@ buildreq-configure
 buildreq-distutils3
 bzip2-dev
 bzip2-staticdev
-doxygen
-elfutils-dev
-elfutils-staticdev
 gcc
 gcc-dev
 gcc-libstdc++32
@@ -25,8 +22,6 @@ libstdc++
 libtool-dev
 libxml2-dev
 libxml2-staticdev
-m4
-mesa-dev
 ncurses-dev
 pkg-config
 pkg-config-dev

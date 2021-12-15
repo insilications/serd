@@ -1,5 +1,5 @@
-PKG_NAME := file
-URL = https://github.com/file/file.git
+PKG_NAME := serd
+URL = https://gitlab.com/drobilla/serd.git
 ARCHIVES = 
 ARCHIVES_GIT = 
 
