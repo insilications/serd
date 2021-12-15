@@ -5,12 +5,15 @@
 %define keepstatic 1
 Name     : serd
 Version  : 0.30.10
-Release  : 321
+Release  : 323
 URL      : file:///aot/build/clearlinux/packages/serd/serd-v0.30.10.tar.gz
 Source0  : file:///aot/build/clearlinux/packages/serd/serd-v0.30.10.tar.gz
 Summary  : Lightweight RDF syntax library
 Group    : Development/Tools
 License  : GPL-2.0
+Requires: serd-bin = %{version}-%{release}
+Requires: serd-lib = %{version}-%{release}
+Requires: serd-man = %{version}-%{release}
 BuildRequires : automake-dev
 BuildRequires : buildreq-configure
 BuildRequires : buildreq-distutils3
@@ -60,6 +63,51 @@ writing [Turtle][], [TriG][], [NTriples][], and [NQuads][].  Serd is suitable
 for performance-critical or resource-limited applications, such as serialising
 very large data sets or embedded systems.
 
+%package bin
+Summary: bin components for the serd package.
+Group: Binaries
+
+%description bin
+bin components for the serd package.
+
+
+%package dev
+Summary: dev components for the serd package.
+Group: Development
+Requires: serd-lib = %{version}-%{release}
+Requires: serd-bin = %{version}-%{release}
+Provides: serd-devel = %{version}-%{release}
+Requires: serd = %{version}-%{release}
+
+%description dev
+dev components for the serd package.
+
+
+%package lib
+Summary: lib components for the serd package.
+Group: Libraries
+
+%description lib
+lib components for the serd package.
+
+
+%package man
+Summary: man components for the serd package.
+Group: Default
+
+%description man
+man components for the serd package.
+
+
+%package staticdev
+Summary: staticdev components for the serd package.
+Group: Default
+Requires: serd-dev = %{version}-%{release}
+
+%description staticdev
+staticdev components for the serd package.
+
+
 %prep
 %setup -q -n serd
 cd %{_builddir}/serd
@@ -74,7 +122,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1639607956
+export SOURCE_DATE_EPOCH=1639608865
 unset LD_AS_NEEDED
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
@@ -283,7 +331,8 @@ export LDFLAGS="${LDFLAGS_GENERATE}"
 export ASMFLAGS="${ASMFLAGS_GENERATE}"
 export LIBS="${LIBS_GENERATE}"
 sd -r 'allow_unknown=False' 'allow_unknown=True' waflib/ || :
-%waf --out=builddir --no-coverage \
+%waf --out=builddir --static \
+--no-coverage \
 --test || :
 ./waf build --verbose --jobs=16 --out=builddir
 ## profile_payload start
@@ -306,7 +355,8 @@ export LDFLAGS="${LDFLAGS_USE}"
 export ASMFLAGS="${ASMFLAGS_USE}"
 export LIBS="${LIBS_USE}"
 sd -r 'allow_unknown=False' 'allow_unknown=True' waflib/ || :
-%waf --out=builddir --no-coverage \
+%waf --out=builddir --static \
+--no-coverage \
 --test || :
 ./waf build --verbose --jobs=16 --out=builddir
 fi
@@ -319,3 +369,26 @@ popd
 
 %files
 %defattr(-,root,root,-)
+
+%files bin
+%defattr(-,root,root,-)
+/usr/bin/serdi
+
+%files dev
+%defattr(-,root,root,-)
+/usr/include/serd-0/serd/serd.h
+/usr/lib64/libserd-0.so
+/usr/lib64/pkgconfig/serd-0.pc
+
+%files lib
+%defattr(-,root,root,-)
+/usr/lib64/libserd-0.so.0
+/usr/lib64/libserd-0.so.0.30.11
+
+%files man
+%defattr(0644,root,root,0755)
+/usr/share/man/man1/serdi.1
+
+%files staticdev
+%defattr(-,root,root,-)
+/usr/lib64/libserd-0.a
