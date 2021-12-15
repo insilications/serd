@@ -1,0 +1,76 @@
+From 3a3fe7c82c379bb4e5d08efbc3452b933f270639 Mon Sep 17 00:00:00 2001
+From: Francisco Boni <boboniboni@gmail.com>
+Date: Wed, 15 Dec 2021 19:37:11 -0300
+Subject: [PATCH] Fix PGO build
+
+---
+ wscript | 33 ++++++++++++++++-----------------
+ 1 file changed, 16 insertions(+), 17 deletions(-)
+
+diff --git a/wscript b/wscript
+index 178ac06d..fadc413d 100644
+--- a/wscript
++++ b/wscript
+@@ -141,7 +141,7 @@ def configure(conf):
+                         include_path=str(conf.path.find_node('include')))
+ 
+     if conf.env.BUILD_TESTS:
+-        serdi_node = conf.path.get_bld().make_node('serdi_static')
++        serdi_node = conf.path.get_bld().make_node('serdi')
+     else:
+         serdi_node = conf.path.get_bld().make_node('serdi')
+ 
+@@ -211,24 +211,23 @@ def build(bld):
+             **lib_args)
+ 
+     if bld.env.BUILD_TESTS:
+-        coverage_flags = [''] if bld.env.NO_COVERAGE else ['--coverage']
+-        test_args = {'includes':     ['include'],
+-                     'cflags':       coverage_flags,
+-                     'linkflags':    coverage_flags,
+-                     'lib':          lib_args['lib'],
+-                     'install_path': ''}
++        #coverage_flags = [''] if bld.env.NO_COVERAGE else ['--coverage']
++        #test_args = {'includes':     ['include'],
++                     #'cflags':       coverage_flags,
++                     #'linkflags':    coverage_flags,
++                     #'lib':          lib_args['lib'],
++                     #'install_path': ''}
+ 
+         # Profiled static library for test coverage
+-        bld(features     = 'c cstlib',
+-            source       = lib_source,
+-            name         = 'libserd_profiled',
+-            target       = 'serd_profiled',
+-            defines      = defines + ['SERD_STATIC', 'SERD_INTERNAL'],
+-            **test_args)
++        #bld(features     = 'c cstlib',
++            #source       = lib_source,
++            #name         = 'libserd_profiled',
++            #target       = 'serd_profiled',
++            #defines      = defines + ['SERD_STATIC', 'SERD_INTERNAL'],
++            #**lib_args)
+ 
+         # Test programs
+-        for prog in [('serdi_static', 'src/serdi.c'),
+-                     ('test_env', 'test/test_env.c'),
++        for prog in [('test_env', 'test/test_env.c'),
+                      ('test_free_null', 'test/test_free_null.c'),
+                      ('test_node', 'test/test_node.c'),
+                      ('test_read_chunk', 'test/test_read_chunk.c'),
+@@ -238,10 +237,10 @@ def build(bld):
+                      ('test_writer', 'test/test_writer.c')]:
+             bld(features     = 'c cprogram',
+                 source       = prog[1],
+-                use          = 'libserd_profiled',
++                use          = 'libserd_static',
+                 target       = prog[0],
+                 defines      = defines + ['SERD_STATIC'],
+-                **test_args)
++                **lib_args)
+ 
+     # Utilities
+     if bld.env.BUILD_UTILS:
+-- 
+2.34.1
+
