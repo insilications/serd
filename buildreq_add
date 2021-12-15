@@ -5,6 +5,7 @@ buildreq-configure
 buildreq-distutils3
 bzip2-dev
 bzip2-staticdev
+clr-rpm-config
 gcc
 gcc-dev
 gcc-libstdc++32
