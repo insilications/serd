@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : serd
 Version  : 0.30.10
-Release  : 323
+Release  : 324
 URL      : file:///aot/build/clearlinux/packages/serd/serd-v0.30.10.tar.gz
 Source0  : file:///aot/build/clearlinux/packages/serd/serd-v0.30.10.tar.gz
 Summary  : Lightweight RDF syntax library
@@ -122,7 +122,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1639608865
+export SOURCE_DATE_EPOCH=1639833752
 unset LD_AS_NEEDED
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
